@@ -1,0 +1,43 @@
+//message between teamclient and teamserver
+syntax = "proto3";
+package ct;
+option optimize_for = LITE_RUNTIME;
+
+option go_package = "teamserver/internal/proto/protobuf";
+
+
+enum CMDID{
+    GET_BEACONS_REQ =0;
+    GET_BEACONS_RSP =1;
+    GET_DOWNLOAD_FILE = 2;
+    START_BEACON_SERVER = 3;
+    STOP_BEACON_SERVER = 4;
+    GET_BEACON_SERVER = 5;
+    ERROR_MSG = 6;
+}
+
+message BeaconInfo{
+    string create_tm = 1;
+    string update_tm = 2;
+    string ipaddr = 3;
+    string beacon_id = 4;
+    string detail_info = 5;
+}
+
+message BeaconsRsp{
+    repeated BeaconInfo beacon = 1;
+}
+
+message ErrorMsg{
+    int32  cmdid = 1;
+    string error = 2;
+}
+
+message ServerItem{
+    string name = 1;
+    string addr = 2;
+}
+
+message ServerInfo{
+    repeated ServerItem server = 1;
+}

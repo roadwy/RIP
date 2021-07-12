@@ -1,0 +1,108 @@
+//beacon task
+syntax = "proto3";
+package c2;
+option optimize_for = LITE_RUNTIME;
+
+option go_package = "teamserver/internal/proto/protobuf";
+
+enum MSGID{
+    PUBKEY_REQ = 0;
+    PUBKEY_RSP = 1;
+    AUTH_REQ = 2;
+    AUTH_RSP = 3;
+    HOST_INFO_REQ = 4;
+    HOST_INFO_RSP = 5;
+    HEAT_BEAT_REQ = 6;
+    PROCESS_INFO = 7;
+    PROCESS_KILL = 8;
+    PROCESS_INJECT = 9;
+    DISK_LIST = 10;
+    FILE_LIST = 11;
+    DOWNLOAD_FILE = 12;
+    UPLOAD_FILE = 13;
+    EXEC_FILE = 14;
+    CMD_COMMAND = 15;
+    ERROR_RSP = 16;
+    DELETE_FILE = 17;
+}
+
+//C2 
+message TaskData{
+    bytes  nonce = 1;
+    string beacon_id = 2;
+    uint64 task_id = 3;
+    int32  msg_id = 4;
+    bool   rsp_flag = 5;
+    bytes byte_value = 6;
+}
+
+
+//RSA public key
+message AuthRsaKey{
+    string pn = 1;
+    string pe = 2;
+}
+
+message ErrorRsp{
+    int32 msg_id = 1;
+    string error = 2;
+}
+
+//key value
+message MapValueData{
+    map<string, string> dict_value = 1;
+}
+
+message StrParam{
+    string param = 1;
+}
+
+message IntParam{
+    int32 param = 1;
+}
+
+message ProcessItem{
+    int32 pid = 1;
+    int32 ppid = 2;
+    string name = 3;
+    bool   is64 = 4;
+    int32   session = 5;
+    string user = 6;
+}
+
+message ProcessListData{
+    int32 beacon_pid = 1;
+    repeated ProcessItem item = 2;
+}
+
+message DiskListData{
+    repeated string drivers = 1;
+}
+
+message FileItem{
+    uint64 modify_unix_tm = 1;
+    uint64 file_size = 2;
+    string file_name = 3;
+    bool is_dir = 4;  
+}
+
+message FileListData{
+    string parent_dir = 1;
+    repeated FileItem files = 2;
+}
+
+message CMDPARAM{
+    string current_dir = 1;
+    string cmd = 2;
+}
+
+message UploadFile{
+    string upload_dir = 1;
+    string file_name = 2;
+    bytes file_data = 3;
+}
+
+message DownLoadFile{
+    string file_path = 1;
+    bytes file_data = 2;
+}

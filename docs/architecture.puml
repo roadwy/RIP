@@ -1,0 +1,34 @@
+@startuml
+
+package "teamserver" {
+  [store]
+  [team_grpc_server]
+  [beacon_gnet_server]
+}
+
+cloud {
+   [network(grpc)]
+}
+
+cloud {
+  [network(udp_tcp_http)]
+}
+
+package "beacon"{
+  [cmd]
+  [screehshot]
+  [beacon_yasio_client]
+}
+
+package "teamclient"{
+  [Qt_Gui]
+  [teamclient_grpc_client]
+}
+
+[beacon_yasio_client] <--> [network(udp_tcp_http)]
+[beacon_gnet_server] <--> [network(udp_tcp_http)]
+
+[network(grpc)] <--> [team_grpc_server]
+[teamclient_grpc_client] <--> [network(grpc)]
+
+@enduml

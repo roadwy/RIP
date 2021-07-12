@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1108</width>
+    <height>575</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Khepri</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../res/client.qrc">
+    <normaloff>:/logo/ico/log.ico</normaloff>:/logo/ico/log.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(240, 243, 249);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTreeView" name="beaconView">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(240, 243, 249);
+border-color: rgb(165, 189, 214);</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(202, 218, 234);</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="eventlogTab">
+       <attribute name="title">
+        <string>Event Log</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1108</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuKhepri">
+    <property name="title">
+     <string>Khepri</string>
+    </property>
+    <addaction name="actionListener"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionEventLog"/>
+    <addaction name="actionDownload"/>
+    <addaction name="actionScreenShots"/>
+   </widget>
+   <widget class="QMenu" name="menuAttacks">
+    <property name="title">
+     <string>Attacks</string>
+    </property>
+    <addaction name="actionSetup"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionSupport"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuKhepri"/>
+   <addaction name="menuView"/>
+   <addaction name="menuAttacks"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>Khepri</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(165, 189, 213);</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="actionListener"/>
+   <addaction name="separator"/>
+   <addaction name="actionDetail"/>
+   <addaction name="actionSetup"/>
+   <addaction name="actionDownload"/>
+   <addaction name="actionScreenShots"/>
+   <addaction name="actionAbout"/>
+  </widget>
+  <action name="actionAdd">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/icon_plus.png</normaloff>:/ico/ico/icon_plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </action>
+  <action name="actionDetail">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/icon_list.png</normaloff>:/ico/ico/icon_list.png</iconset>
+   </property>
+   <property name="text">
+    <string>Detail</string>
+   </property>
+  </action>
+  <action name="actionListener">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/listener.png</normaloff>:/ico/ico/listener.png</iconset>
+   </property>
+   <property name="text">
+    <string>Listeners</string>
+   </property>
+  </action>
+  <action name="actionDownload">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/download.png</normaloff>:/ico/ico/download.png</iconset>
+   </property>
+   <property name="text">
+    <string>Downloads</string>
+   </property>
+  </action>
+  <action name="actionScreenShots">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/screenshot.png</normaloff>:/ico/ico/screenshot.png</iconset>
+   </property>
+   <property name="text">
+    <string>Screenshots</string>
+   </property>
+  </action>
+  <action name="actionWindows">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/windows.png</normaloff>:/ico/ico/windows.png</iconset>
+   </property>
+   <property name="text">
+    <string>Windows</string>
+   </property>
+  </action>
+  <action name="actionLinux">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/linux.png</normaloff>:/ico/ico/linux.png</iconset>
+   </property>
+   <property name="text">
+    <string>Linux</string>
+   </property>
+  </action>
+  <action name="actionMac">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/macos.png</normaloff>:/ico/ico/macos.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mac</string>
+   </property>
+  </action>
+  <action name="actionSupport">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/github.ico</normaloff>:/ico/ico/github.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Support</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/about.png</normaloff>:/ico/ico/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionEventLog">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/console.ico</normaloff>:/ico/ico/console.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Event Log</string>
+   </property>
+  </action>
+  <action name="actionSetup">
+   <property name="icon">
+    <iconset resource="../res/client.qrc">
+     <normaloff>:/ico/ico/set.png</normaloff>:/ico/ico/set.png</iconset>
+   </property>
+   <property name="text">
+    <string>Setup</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../res/client.qrc"/>
+ </resources>
+ <connections/>
+</ui>

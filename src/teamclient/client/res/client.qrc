@@ -1,0 +1,26 @@
+<RCC>
+  <qresource prefix="/ico">
+    <file>ico/linux.png</file>
+    <file>ico/macos.png</file>
+    <file>ico/listener.png</file>
+    <file>ico/windows.png</file>
+    <file>ico/about.png</file>
+    <file>ico/download.png</file>
+    <file>ico/screenshot.png</file>
+    <file>ico/disk.png</file>
+    <file>ico/console.ico</file>
+    <file>ico/dir.png</file>
+    <file>ico/file.png</file>
+    <file>ico/icon_list.png</file>
+    <file>ico/icon_plus.png</file>
+    <file>ico/set.png</file>
+    <file>ico/github.ico</file>
+  </qresource>
+  <qresource prefix="beacon">
+    <file>Linux/beacon.x64</file>
+    <file>Windows/beacon.x86</file>
+  </qresource>
+  <qresource prefix="logo">
+    <file>ico/log.ico</file>
+  </qresource>
+</RCC>

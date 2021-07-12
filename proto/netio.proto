@@ -1,0 +1,12 @@
+syntax = "proto3";
+package c2;
+option optimize_for = LITE_RUNTIME;
+
+option go_package = "teamserver/internal/proto/protobuf";
+
+enum CONN_TYPE{
+	CONNNAME_TCP = 0;
+	CONNNAME_UDP = 1;
+	CONNNAME_HTTPS = 2;
+	CONNNAME_MAX = 3;
+}

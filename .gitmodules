@@ -1,0 +1,3 @@
+[submodule "src/beacon/yasio"]
+	path = src/beacon/yasio
+	url = https://github.com/yasio/yasio.git
