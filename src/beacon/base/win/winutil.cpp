@@ -305,12 +305,12 @@ bool win::get_mac(std::string& mac)
 				continue;
 			char str[32];
 			sprintf(str, "%02X-%02X-%02X-%02X-%02X-%02X",
-				int(adapter_ptr->Address[0]),
-				int(adapter_ptr->Address[1]),
-				int(adapter_ptr->Address[2]),
-				int(adapter_ptr->Address[3]),
-				int(adapter_ptr->Address[4]),
-				int(adapter_ptr->Address[5]));
+                    uint8_t(adapter_ptr->Address[0]),
+                    uint8_t(adapter_ptr->Address[1]),
+                    uint8_t(adapter_ptr->Address[2]),
+                    uint8_t(adapter_ptr->Address[3]),
+                    uint8_t(adapter_ptr->Address[4]),
+                    uint8_t(adapter_ptr->Address[5]));
 			mac = str;
 			ret = true;
 			break;

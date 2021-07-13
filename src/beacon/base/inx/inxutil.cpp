@@ -59,12 +59,12 @@ bool inx::get_mac(std::string &mac) {
 	{
 		char temp[32] = {0};
 		sprintf(temp, "%02X-%02X-%02X-%02X-%02X-%02X",
-			int(ifr.ifr_addr.sa_data[0]),
-			int(ifr.ifr_addr.sa_data[1]),
-			int(ifr.ifr_addr.sa_data[2]),
-			int(ifr.ifr_addr.sa_data[3]),
-			int(ifr.ifr_addr.sa_data[4]),
-			int(ifr.ifr_addr.sa_data[5]));
+		        uint8_t(ifr.ifr_addr.sa_data[0]),
+                uint8_t(ifr.ifr_addr.sa_data[1]),
+                uint8_t(ifr.ifr_addr.sa_data[2]),
+                uint8_t(ifr.ifr_addr.sa_data[3]),
+                uint8_t(ifr.ifr_addr.sa_data[4]),
+                uint8_t(ifr.ifr_addr.sa_data[5]));
 		mac = temp;
 		return true;
 	}
