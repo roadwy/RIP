@@ -25,6 +25,7 @@ import (
 	"google.golang.org/grpc/peer"
 	"log"
 	"net"
+	"strings"
 	"sync"
 	"teamserver/internal/client"
 	"teamserver/internal/conf"
@@ -101,6 +102,11 @@ func (t *TeamRPCService) CommandChannel(channel pb.TeamRPCService_CommandChannel
 				t.cmdqueue.Publish(conf.CmdRspTopic, "exit")
 				break
 			}
+			err = t.isValidToken(data.Token)
+			if err != nil {
+				log.Println(err.Error())
+				break
+			}
 			t.cmdqueue.Publish(conf.CmdReqTopic, data)
 			store.AddTask(data.MsgId, data.BeaconId, data.ByteValue)
 			log.Println(data.BeaconId)
@@ -132,8 +138,14 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 		return nil, errors.New("cannel")
 	}
 
+	err = t.isValidToken(req.Token)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+
 	var data []byte
-	rspCmdid := req.CmdId
+	rspCmdId := req.CmdId
 	switch pb.CMDID(req.CmdId) {
 	case pb.CMDID_GET_BEACONS_REQ:
 		{
@@ -145,21 +157,21 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 			item := &pb.ServerItem{}
 			err := proto.Unmarshal(req.ByteValue, item)
 			if err != nil {
-				data = t.setErrorMsg(rspCmdid, err)
-				rspCmdid = int32(pb.CMDID_ERROR_MSG)
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
 				break
 			}
 			err = t.serverMgr.StartServer(item.Name, item.Addr, t.beaconMsgHandler)
 			if err != nil {
-				data = t.setErrorMsg(rspCmdid, err)
-				rspCmdid = int32(pb.CMDID_ERROR_MSG)
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
 				break
 			}
-			rspCmdid = int32(pb.CMDID_GET_BEACON_SERVER)
+			rspCmdId = int32(pb.CMDID_GET_BEACON_SERVER)
 			data, err = t.serverMgr.GetRunningServer()
 			if err != nil {
-				data = t.setErrorMsg(rspCmdid, err)
-				rspCmdid = int32(pb.CMDID_ERROR_MSG)
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
 				break
 			}
 			break
@@ -169,21 +181,21 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 			item := &pb.ServerItem{}
 			err := proto.Unmarshal(req.ByteValue, item)
 			if err != nil {
-				data = t.setErrorMsg(rspCmdid, err)
-				rspCmdid = int32(pb.CMDID_ERROR_MSG)
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
 				break
 			}
 			err = t.serverMgr.StopServer(item.Name)
 			if err != nil {
-				data = t.setErrorMsg(rspCmdid, err)
-				rspCmdid = int32(pb.CMDID_ERROR_MSG)
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
 				break
 			}
-			rspCmdid = int32(pb.CMDID_GET_BEACON_SERVER)
+			rspCmdId = int32(pb.CMDID_GET_BEACON_SERVER)
 			data, err = t.serverMgr.GetRunningServer()
 			if err != nil {
-				data = t.setErrorMsg(rspCmdid, err)
-				rspCmdid = int32(pb.CMDID_ERROR_MSG)
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
 				break
 			}
 		}
@@ -191,8 +203,8 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 		{
 			data, err = t.serverMgr.GetRunningServer()
 			if err != nil {
-				data = t.setErrorMsg(rspCmdid, err)
-				rspCmdid = int32(pb.CMDID_ERROR_MSG)
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
 				break
 			}
 			break
@@ -201,7 +213,21 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 		break
 	}
 
-	return &pb.ServerCmdRsp{CmdId: rspCmdid, ByteValue: data}, nil
+	return &pb.ServerCmdRsp{CmdId: rspCmdId, ByteValue: data}, nil
+}
+
+func (t *TeamRPCService) isValidToken(token string) (err error) {
+
+	err = errors.New("error token")
+	t.rpcclient.Range(func(key, value interface{}) bool {
+		tokenItem := key.(string)
+		if strings.Compare(tokenItem, token) == 0 {
+			err = nil
+			return false
+		}
+		return true
+	})
+	return err
 }
 
 func (t *TeamRPCService) setErrorMsg(cmdid int32, err error) (data []byte) {
