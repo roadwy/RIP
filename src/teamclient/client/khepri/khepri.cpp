@@ -187,7 +187,6 @@ void khepri::on_refresh_beacon_list()
 		return "";
 	};
 
-
 	clear_item_model_data(beacon_model_, 0);
 	ct::BeaconsRsp beacon_rsp;
 	beacon_rsp.ParseFromArray(rsp.byte_value().data(), rsp.byte_value().size());
@@ -222,6 +221,21 @@ void khepri::on_refresh_beacon_list()
 	}
 }
 
+void khepri::delete_beacon(const QString& beacon_id)
+{
+	ct::DeleteBeacon delete_beacon;
+	delete_beacon.set_beaconid(beacon_id.toStdString());
+	std::vector<char> data(delete_beacon.ByteSizeLong());
+	if (!delete_beacon.SerializePartialToArray(data.data(), data.size()))
+		return;
+
+	c2::ServerCmdRsp rsp;
+	if (!rpc_client_->set_server_cmd(ct::DELETE_BEACON, data, rsp))
+		return;
+
+	return on_refresh_beacon_list();
+}
+
 void khepri::init_target_view()
 {
 	QTreeView *view = ui_.beaconView;
@@ -249,6 +263,13 @@ void khepri::init_target_view()
 	beacon_menu_->addAction(tr("Refresh Beacon"), this, [&] {
 		auto beacon_id = get_current_item_view_data(ui_.beaconView, BEACONID).toStdString();
 		beacon_cmd_->send_get_host_info(beacon_id);
+	});
+
+	beacon_menu_->addAction(tr("Delete Beacon"), this, [&] {
+		auto beacon_id = get_current_item_view_data(ui_.beaconView, BEACONID);
+		if (beacon_id.isEmpty())
+			return;
+		delete_beacon(beacon_id);
 	});
 
 	beacon_menu_->addAction(tr("Process List"), this, [&] {

@@ -14,6 +14,7 @@ enum CMDID{
     STOP_BEACON_SERVER = 4;
     GET_BEACON_SERVER = 5;
     ERROR_MSG = 6;
+    DELETE_BEACON = 7;
 }
 
 message BeaconInfo{
@@ -40,4 +41,8 @@ message ServerItem{
 
 message ServerInfo{
     repeated ServerItem server = 1;
+}
+
+message DeleteBeacon{
+    string beaconid = 1;
 }

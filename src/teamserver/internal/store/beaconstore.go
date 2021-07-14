@@ -25,43 +25,47 @@ import (
 type BeaconStore struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	DeletedAt *time.Time
 	BeaconId  string `gorm:"primary_key"`
 	IpAddr    string
 	Detail    []byte
 }
 
-func UpdateBeacon(beaconid string, ipaddr string, detail []byte) (err error) {
+func UpdateBeacon(beaconId string, ipAddr string, detail []byte) (err error) {
 	beacon := BeaconStore{
-		BeaconId: beaconid,
-		IpAddr:   ipaddr,
+		BeaconId: beaconId,
+		IpAddr:   ipAddr,
 		Detail:   detail,
 	}
 
 	db := Instance()
 	db.AutoMigrate(&BeaconStore{})
-
-	//create
 	if err = db.Create(&beacon).Error; err == nil {
 		return
 	}
 
 	beacon_old := BeaconStore{}
 
-	if db.First(&beacon_old, "beacon_id = ?", beaconid).RecordNotFound() {
+	if db.First(&beacon_old, "beacon_id = ?", beaconId).RecordNotFound() {
 		return errors.New("beacon id not found")
 	}
 
 	return db.Model(&beacon_old).Update(BeaconStore{
-		IpAddr: ipaddr,
+		IpAddr: ipAddr,
 		Detail: detail,
 	}).Error
 }
 
-func GetBeacons() (beacons_data []byte, err error) {
+func DeleteBeacon(beaconId string) (err error) {
+
+	db := Instance()
+	return db.Where("beacon_id = ?", beaconId).Delete(&BeaconStore{}).Error
+}
+
+func GetBeacons() (beaconsData []byte, err error) {
 	var beacon []BeaconStore
 
 	db := Instance()
-
 	query := db.Find(&beacon)
 	if query.Error != nil {
 		err = query.Error
@@ -84,10 +88,8 @@ func GetBeacons() (beacons_data []byte, err error) {
 			BeaconId:   v.BeaconId,
 			DetailInfo: detail,
 		}
-
 		rsp.Beacon = append(rsp.Beacon, b)
 	}
-
-	beacons_data, err = proto.Marshal(rsp)
+	beaconsData, err = proto.Marshal(rsp)
 	return
 }

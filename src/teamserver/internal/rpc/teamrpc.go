@@ -38,8 +38,8 @@ import (
 
 type TeamRPCService struct {
 	pb.UnimplementedTeamRPCServiceServer
-	cmdqueue         *mq.Client
-	rpcclient        sync.Map
+	cmdQueue         *mq.Client
+	rpcClient        sync.Map
 	beaconMsgHandler *handler.MsgHandler
 	serverMgr        *server.ServerMgr
 }
@@ -78,7 +78,7 @@ func (t *TeamRPCService) Login(ctx context.Context, req *pb.LoginUserReq) (rsp *
 	client.ClientAddr = ip
 	client.Token = token
 
-	t.rpcclient.Store(token, client)
+	t.rpcClient.Store(token, client)
 	rsp.Token = token
 
 	return rsp, nil
@@ -89,7 +89,7 @@ func (t *TeamRPCService) CommandChannel(channel pb.TeamRPCService_CommandChannel
 	wg := sync.WaitGroup{}
 	wg.Add(2)
 
-	rspch, err := t.cmdqueue.Subscribe(conf.CmdRspTopic)
+	rspch, err := t.cmdQueue.Subscribe(conf.CmdRspTopic)
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func (t *TeamRPCService) CommandChannel(channel pb.TeamRPCService_CommandChannel
 			data, err := channel.Recv()
 			if err != nil {
 				log.Println(err)
-				t.cmdqueue.Publish(conf.CmdRspTopic, "exit")
+				t.cmdQueue.Publish(conf.CmdRspTopic, "exit")
 				break
 			}
 			err = t.isValidToken(data.Token)
@@ -107,7 +107,7 @@ func (t *TeamRPCService) CommandChannel(channel pb.TeamRPCService_CommandChannel
 				log.Println(err.Error())
 				break
 			}
-			t.cmdqueue.Publish(conf.CmdReqTopic, data)
+			t.cmdQueue.Publish(conf.CmdReqTopic, data)
 			store.AddTask(data.MsgId, data.BeaconId, data.ByteValue)
 			log.Println(data.BeaconId)
 		}
@@ -115,9 +115,9 @@ func (t *TeamRPCService) CommandChannel(channel pb.TeamRPCService_CommandChannel
 	}()
 
 	go func() {
-		defer t.cmdqueue.Unsubscribe(conf.CmdRspTopic, rspch)
+		defer t.cmdQueue.Unsubscribe(conf.CmdRspTopic, rspch)
 		for {
-			data, ok := (t.cmdqueue.GetPayLoad(rspch)).(pb.CommandRsp)
+			data, ok := (t.cmdQueue.GetPayLoad(rspch)).(pb.CommandRsp)
 			if !ok {
 				log.Println("error rsp")
 				break
@@ -209,6 +209,22 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 			}
 			break
 		}
+	case pb.CMDID_DELETE_BEACON:
+		{
+			deleteValue := &pb.DeleteBeacon{}
+			err := proto.Unmarshal(req.ByteValue, deleteValue)
+			if err != nil {
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
+				break
+			}
+			err = store.DeleteBeacon(deleteValue.Beaconid)
+			if err != nil {
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
+				break
+			}
+		}
 	default:
 		break
 	}
@@ -219,7 +235,7 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 func (t *TeamRPCService) isValidToken(token string) (err error) {
 
 	err = errors.New("error token")
-	t.rpcclient.Range(func(key, value interface{}) bool {
+	t.rpcClient.Range(func(key, value interface{}) bool {
 		tokenItem := key.(string)
 		if strings.Compare(tokenItem, token) == 0 {
 			err = nil
@@ -253,6 +269,6 @@ func NewTeamRpcService(addr string, mqclient *mq.Client, maxSendSize int, maxRec
 	msgHandler := handler.NewMsgHandler(mqclient)
 
 	rpcServer := grpc.NewServer(options...)
-	pb.RegisterTeamRPCServiceServer(rpcServer, &TeamRPCService{cmdqueue: mqclient, beaconMsgHandler: msgHandler, serverMgr: serverMgr})
+	pb.RegisterTeamRPCServiceServer(rpcServer, &TeamRPCService{cmdQueue: mqclient, beaconMsgHandler: msgHandler, serverMgr: serverMgr})
 	return rpcServer.Serve(lis)
 }

@@ -72,6 +72,8 @@ private:
 
 	void on_refresh_beacon_list();
 
+	void delete_beacon(const QString& beacon_id);
+
 signals:
 	void statusmsg(const QString& msg);
 	void fatalmsg(const QString& msg);
