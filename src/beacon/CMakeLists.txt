@@ -71,7 +71,7 @@ if(MSVC)
     endforeach()    
 endif(MSVC)
 
-find_package(OpenSSL REQUIRED)
+find_package(cryptopp CONFIG REQUIRED)
 find_package(Protobuf CONFIG REQUIRED)
 
 if(LINUX)
@@ -80,9 +80,9 @@ if(LINUX)
     set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} -Os -s")
 
     add_executable(${target_name} ${BEACON_COMM_CORE} ${BEACON_LINUX_SRC} ${PROTOBUF_CPP_SRC})
-    target_link_libraries(${target_name}  PRIVATE OpenSSL::Crypto PRIVATE protobuf::libprotobuf-lite PRIVATE dl PRIVATE pthread)
+    target_link_libraries(${target_name}  PRIVATE cryptopp-static PRIVATE protobuf::libprotobuf-lite PRIVATE dl PRIVATE pthread)
 else(LINUX)
 
     add_executable(${target_name} ${BEACON_COMM_CORE} ${BEACON_WIN_SRC} ${PROTOBUF_CPP_SRC})
-    target_link_libraries(${target_name} PRIVATE Crypt32.lib PRIVATE OpenSSL::Crypto PRIVATE protobuf::libprotobuf-lite)
+    target_link_libraries(${target_name} PRIVATE cryptopp-static PRIVATE protobuf::libprotobuf-lite)
 endif(LINUX)

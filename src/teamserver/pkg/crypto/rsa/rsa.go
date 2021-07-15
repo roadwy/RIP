@@ -55,8 +55,8 @@ func NewRsaEncode(pubKey, privateKey []byte) (encode *RsaEncode, err error) {
 	}
 
 	pubRsaKey := pubInterface.(*rsa.PublicKey)
-	N := fmt.Sprintf("%x", pubRsaKey.N)
-	E := fmt.Sprintf("%x", pubRsaKey.E)
+	N := fmt.Sprintf("0x%x", pubRsaKey.N)
+	E := fmt.Sprintf("0x%x", pubRsaKey.E)
 
 	encode = &RsaEncode{
 		PubKey:     pubRsaKey,

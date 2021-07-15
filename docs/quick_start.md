@@ -4,7 +4,7 @@ vcpkg、gcc、g++、cmake、vs2015、go 1.14、goland、clion、protobuf protoc�
 
 #### Install dependent open source code
 
-**beacon**: yasio、openssl、protobuf
+**beacon**: yasio、cryptopp、protobuf
 **teamclient**：grpc、qt5-base
 **teamserver**: go mod tidy、go get all
 

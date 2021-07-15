@@ -20,18 +20,17 @@
 #include <stdint.h>
 #include <string.h>
 #include <vector>
-#include <openssl/rsa.h>
-#include<openssl/pem.h>
-#include<openssl/err.h>
+#include <cryptopp/rsa.h>
+#include <cryptopp/osrng.h>
+#include <cryptopp/chacha.h>
 
-#define chacha20_nonce_len	8
-#define chacha20_key_len       32
+
+#define chacha20_nonce_len	 8
+#define chacha20_key_len     32
 
 void chacha20_crypt(const uint8_t key[chacha20_key_len], const uint8_t nonce[chacha20_nonce_len], uint8_t* bytes, size_t n_bytes, uint64_t counter = 0);
 
-RSA* new_pub_rsa(const char* N, const char* E);
-
-int rsa_pub_encrypt(RSA* rsa_key, unsigned char* data, int data_size, std::vector<char>& enc_data);
+int rsa_pub_encrypt(const char* N, const char* E, unsigned char* data, int data_size, std::vector<char>& enc_data);
 
 #endif
 

@@ -165,15 +165,8 @@ void netio_service::on_auth(const uint64_t& session_id, const std::vector<char>&
 			return;
 		}
 
-		RSA* rsa = new_pub_rsa(pubkey.pn().c_str(), pubkey.pe().c_str());
-		if (!rsa)
-		{
-			LOG_ERROR("error  create pubkey");
-			return;
-		}
-
 		std::vector<char> encrypted_session_key;
-		auto enc_size = rsa_pub_encrypt(rsa, session_key_, sizeof(session_key_), encrypted_session_key);
+		auto enc_size = rsa_pub_encrypt(pubkey.pn().c_str(), pubkey.pe().c_str(), session_key_, sizeof(session_key_), encrypted_session_key);
 		if (!enc_size)
 		{
 			LOG_ERROR("error  encrypt pubkey");

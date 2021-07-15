@@ -15,69 +15,17 @@
 
 #include "crypto.h"
 
-RSA* createRSA(unsigned char* key, bool pubkey)
+int rsa_pub_encrypt(const char* N, const char* E, unsigned char* plain_data, int plain_data_size, std::vector<char>& cipher_data)
 {
-	RSA* rsa = nullptr;
-	BIO* keybio = nullptr;
-	keybio = BIO_new_mem_buf(key, strlen((const char*)key));
-	if (keybio == NULL) {
-		return nullptr;
-	}
-
-	if (pubkey)
-		rsa = PEM_read_bio_RSA_PUBKEY(keybio, &rsa, NULL, NULL);
-	else
-		rsa = PEM_read_bio_RSAPrivateKey(keybio, &rsa, NULL, NULL);
-
-	BIO_free(keybio);
-	return rsa;
-}
-
-RSA* new_pub_rsa(const char* N, const char* E)
-{
-	BIGNUM *bne = BN_new();
-	if (!bne)
-		return nullptr;
-
-	BIGNUM *bnn = BN_new();
-	if (!bnn) {
-		BN_free(bne);
-		return nullptr;
-	}
-
-	BIGNUM * bnd = BN_new();
-	if (!bnd) {
-		BN_free(bnd);
-		return nullptr;
-	}
-
-	RSA* rsa = RSA_new();
-	if (!rsa) {
-		BN_free(bne);
-		BN_free(bnn);
-		BN_free(bnd);
-		return nullptr;
-	}
-	BN_hex2bn(&bne, E);
-	BN_hex2bn(&bnn, N);
-	RSA_set0_key(rsa, bnn, bne, bnd);
-	return rsa;
-}
-
-int rsa_pub_encrypt(RSA* rsa_key, unsigned char* data, int data_size, std::vector<char>& enc_data)
-{
-	int  enc_size = 0;
-	do
-	{
-		int rsa_len = RSA_size(rsa_key);
-		enc_data.resize(rsa_len);
-		enc_size = RSA_public_encrypt(data_size, data, (unsigned char*)enc_data.data(), rsa_key, RSA_PKCS1_PADDING);
-	} while (false);
-
-	RSA_set0_key(rsa_key, 0, 0, 0);
-	RSA_free(rsa_key);
-	if (!enc_size)
-		return 0;
-
-	return enc_size;
+	CryptoPP::Integer big_n(N);
+	CryptoPP::Integer big_e(E);
+	CryptoPP::RSA::PublicKey pk;
+	pk.Initialize(big_n, big_e);
+	CryptoPP::RSAES_PKCS1v15_Encryptor encryptor(pk);
+	CryptoPP::AutoSeededRandomPool rng;
+	auto cipher_len = encryptor.CiphertextLength(plain_data_size);
+	size_t maxLength = encryptor.FixedMaxPlaintextLength();
+	cipher_data.resize(cipher_len);
+	encryptor.Encrypt(rng, (const unsigned char *)plain_data, plain_data_size, (unsigned char *)cipher_data.data());
+	return encryptor.FixedCiphertextLength();
 }
