@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>318</height>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
      <x>10</x>
      <y>10</y>
      <width>581</width>
-     <height>271</height>
+     <height>301</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -92,7 +92,7 @@ in Golang and C++.</string>
       <x>60</x>
       <y>200</y>
       <width>451</width>
-      <height>81</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="locale">
@@ -105,12 +105,28 @@ in Golang and C++.</string>
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>260</y>
+      <width>201</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#ff0000;&quot;&gt;DO NOT USE IT ILLEGALLY&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>490</x>
-     <y>290</y>
+     <x>500</x>
+     <y>320</y>
      <width>81</width>
      <height>21</height>
     </rect>
