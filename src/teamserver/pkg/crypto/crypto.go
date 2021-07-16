@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package rsa
+package crypto
 
 import (
 	"crypto/rand"
@@ -22,6 +22,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"golang.org/x/crypto/chacha20"
 )
 
 type RsaEncode struct {
@@ -73,4 +74,16 @@ func (r *RsaEncode) PubEncode(data []byte) ([]byte, error) {
 
 func (r *RsaEncode) PrivateDecode(ciphertext []byte) ([]byte, error) {
 	return rsa.DecryptPKCS1v15(rand.Reader, r.PrivateKey, ciphertext)
+}
+
+func Xchacha20(key []byte, data []byte) (dst []byte, err error) {
+	cipher, err := chacha20.NewUnauthenticatedCipher(key[:chacha20.KeySize], key[chacha20.KeySize:])
+	if err != nil {
+		return
+	}
+
+	dst = make([]byte, len(data))
+	cipher.SetCounter(1)
+	cipher.XORKeyStream(dst, data)
+	return
 }

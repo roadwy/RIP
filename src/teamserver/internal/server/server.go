@@ -17,7 +17,6 @@ package server
 
 import (
 	"encoding/binary"
-	"fmt"
 	"github.com/panjf2000/gnet"
 	"github.com/panjf2000/gnet/pool/goroutine"
 	"log"
@@ -50,7 +49,7 @@ func (cs *beaconServer) React(frame []byte, c gnet.Conn) (out []byte, action gne
 	_ = cs.workerPool.Submit(func() {
 		rsp, err := cs.handler.HandleMsg(data, c, cs.conntype)
 		if err != nil {
-			fmt.Println(err)
+			log.Print(err)
 			c.Close()
 			return
 		}

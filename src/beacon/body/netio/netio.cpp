@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-#include <time.h>
 #include "yasio/obstream.hpp"
 #include "netio.h"
 #include "protocol_header.h"
@@ -130,7 +129,7 @@ void netio_service::on_packet(event_ptr& event)
 		on_auth(header->session_id, task_data);
 	}
 	else {
-		chacha20_crypt(session_key_, &session_key_[chacha20_key_len], (uint8_t*)task_data.data(), task_data.size());
+		xchacha20(session_key_, &session_key_[xchacha20_key_len], (uint8_t*)task_data.data(), task_data.size());
 		handler_.put_msg(std::move(task_data));
 	}
 }
@@ -183,7 +182,7 @@ int netio_service::send_data(std::vector<char> buffer, bool enc_data /*= true*/,
 	obstream obs;
 
 	if (enc_data)
-		chacha20_crypt(session_key_, &session_key_[chacha20_key_len], (uint8_t*)buffer.data(), buffer.size());
+		xchacha20(session_key_, &session_key_[xchacha20_key_len], (uint8_t*)buffer.data(), buffer.size());
 
 	obs.write_bytes(&header, sizeof(header));
 	obs.write_bytes(buffer.data(), buffer.size());
@@ -222,9 +221,7 @@ int netio_service::send_data(std::vector<char> buffer, bool enc_data, int msg_id
 
 void netio_service::init_session_key()
 {
-	srand(time(NULL));
-	for (auto i = 0; i < sizeof(session_key_); i++)
-		session_key_[i] = (uint8_t)(rand() % 255);
+	generate_random_block(session_key_, sizeof(session_key_));
 }
 
 void netio_service::start_heartbeat_timer()

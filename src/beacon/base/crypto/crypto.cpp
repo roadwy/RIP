@@ -15,6 +15,21 @@
 
 #include "crypto.h"
 
+void generate_random_block(uint8_t* block, size_t block_size)
+{
+	CryptoPP::AutoSeededRandomPool prng;
+	prng.GenerateBlock(block, block_size);
+}
+
+void xchacha20(const uint8_t key[xchacha20_key_len], const uint8_t iv[xchacha20_iv_len], uint8_t* bytes, size_t n_bytes, uint64_t counter /*= 0*/)
+{
+	//cryptopp xchacha20 initial block counter of 1(https://cryptopp.com/wiki/XChaCha20)
+
+	CryptoPP::XChaCha20::Encryption enc;
+	enc.SetKeyWithIV(key, xchacha20_key_len, iv, xchacha20_iv_len);
+	enc.ProcessData(bytes, bytes, n_bytes);
+}
+
 int rsa_pub_encrypt(const char* N, const char* E, unsigned char* plain_data, int plain_data_size, std::vector<char>& cipher_data)
 {
 	CryptoPP::Integer big_n(N);

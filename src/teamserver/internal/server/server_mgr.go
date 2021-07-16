@@ -18,9 +18,9 @@ package server
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/panjf2000/gnet"
+	"log"
 	"sync"
 	"teamserver/internal/handler"
 	pb "teamserver/internal/proto/protobuf"
@@ -38,7 +38,7 @@ func (s *ServerMgr) StartServer(name string, addr string, msghandler *handler.Ms
 		server := NewBeaconServer(addr, false, false, nil, msghandler)
 		err = server.Run()
 		if err != nil {
-			fmt.Println(err)
+			log.Print(err)
 		}
 		s.serverInfo.Delete(name)
 	}()

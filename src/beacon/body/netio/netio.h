@@ -66,7 +66,7 @@ private:
 
 	highp_time_t last_send_time_;
 
-	uint8_t session_key_[chacha20_key_len + chacha20_nonce_len];
+	uint8_t session_key_[xchacha20_key_len + xchacha20_iv_len];
 };
 
 #endif //BODY_NETIO_H_

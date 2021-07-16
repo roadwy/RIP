@@ -24,7 +24,7 @@ import (
 	"flag"
 	"io/ioutil"
 	"os"
-	innerRsa "teamserver/pkg/crypto/rsa"
+	"teamserver/pkg/crypto"
 )
 
 const (
@@ -35,7 +35,7 @@ const (
 type ServerConf struct {
 	Dbname           string //default sqlite3 db file
 	BindHost         string //teamserver bind addr
-	RsaEncode        *innerRsa.RsaEncode
+	RsaEncode        *crypto.RsaEncode
 	TeamclientSecret string //teamclient  connect password
 	PublicKeyFile    string //beacon rsa public key file
 	PrivateKeyFile   string //beacon rsa private key file
@@ -117,7 +117,7 @@ func (s *ServerConf) getRsa() (err error) {
 		privateKey, _ = ioutil.ReadFile(s.PrivateKeyFile)
 	}
 
-	s.RsaEncode, err = innerRsa.NewRsaEncode(publicKey, privateKey)
+	s.RsaEncode, err = crypto.NewRsaEncode(publicKey, privateKey)
 	if err != nil {
 		return err
 	}

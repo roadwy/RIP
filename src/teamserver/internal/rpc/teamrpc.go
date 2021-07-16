@@ -18,7 +18,6 @@ package rpc
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
@@ -129,7 +128,7 @@ func (t *TeamRPCService) CommandChannel(channel pb.TeamRPCService_CommandChannel
 	}()
 
 	wg.Wait()
-	fmt.Println("CommandChannel exit")
+	log.Print("CommandChannel exit")
 	return nil
 }
 

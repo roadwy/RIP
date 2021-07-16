@@ -17,8 +17,6 @@ package crypto
 
 import (
 	"bytes"
-	"teamserver/pkg/crypto/chacha20"
-	"teamserver/pkg/crypto/rsa"
 	"testing"
 )
 
@@ -38,7 +36,7 @@ var E = "10001"
 var N = "c83a49bb91353a9bc00b0ea3c4da79f4e3dbce1d22a47a4a5dcf070e99f62203083eb1b962d93a154e5530339d520cd74e7dbbe881b1f829e0eac189dbd1b8cc864e30c5f64f0f5c075e8b5173f11137689a67a2a6d089898e55b8d730c589c3688fdaab7b73691640008d7c8910311d42b542198458bdc018c14b6935585abf"
 
 func TestNewRsaEncode(t *testing.T) {
-	rsa, err := rsa.NewRsaEncode(publicKey, privateKey)
+	rsa, err := NewRsaEncode(publicKey, privateKey)
 	if err != nil {
 		t.Error(err)
 	}
@@ -61,28 +59,5 @@ func TestNewRsaEncode(t *testing.T) {
 
 	if !bytes.Equal(dec, []byte(src)) {
 		t.Error("Rsa error")
-	}
-}
-
-func TestChaCha20(t *testing.T) {
-	var key []byte = []byte{0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08, 0x00, 0x00, 0x00, 0x00}
-	var nonce []byte = []byte{0x00, 0x01, 0x02, 0x03, 0x04, 0x06, 0x07, 0x08}
-
-	enc, err := chacha20.New(key, nonce)
-	if err != nil {
-		t.Error(err)
-	}
-	var dst []byte = make([]byte, 3)
-	src := "abc"
-	enc.XORKeyStream(dst, []byte(src))
-
-	dec, err := chacha20.New(key, nonce)
-	if err != nil {
-		t.Error(err)
-	}
-
-	dec.XORKeyStream(dst, dst)
-	if !bytes.Equal(dst, []byte(src)) {
-		t.Error("chacha20 error")
 	}
 }

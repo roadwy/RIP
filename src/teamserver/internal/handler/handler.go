@@ -17,9 +17,9 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/panjf2000/gnet"
+	"log"
 	"math/rand"
 	"sync"
 	bn "teamserver/internal/beacon"
@@ -27,7 +27,7 @@ import (
 	"teamserver/internal/proto/encode"
 	pb "teamserver/internal/proto/protobuf"
 	"teamserver/internal/store"
-	"teamserver/pkg/crypto/chacha20"
+	"teamserver/pkg/crypto"
 	"teamserver/pkg/mq"
 	"time"
 )
@@ -88,7 +88,7 @@ func (hm *MsgHandler) msgdispatch(netio encode.INetioData, conntype pb.CONN_TYPE
 		return msgrsp, errors.New("no session id")
 	}
 	sessionkey := beacon.(*bn.Beacon).SessionKey
-	taskdata, err := chacha20.Chacha20Crypt(netio.GetData(), sessionkey)
+	taskdata, err := crypto.Xchacha20(sessionkey, netio.GetData())
 	if err != nil {
 		return msgrsp, errors.New("error session key")
 	}
@@ -116,7 +116,7 @@ func (hm *MsgHandler) msgdispatch(netio encode.INetioData, conntype pb.CONN_TYPE
 		break
 	}
 
-	taskdataenc, err := chacha20.Chacha20Crypt(taskrspdata, sessionkey)
+	taskdataenc, err := crypto.Xchacha20(sessionkey, taskrspdata)
 	if err != nil {
 		return
 	}
@@ -168,8 +168,6 @@ func (hm *MsgHandler) onReqAuth(sessionid uint64, taskreq *pb.TaskData, c gnet.C
 
 //todo: save rsp to db
 func (hm *MsgHandler) OnRspData(taskrsp *pb.TaskData) (rsp []byte, err error) {
-	fmt.Print(taskrsp)
-
 	teamclientrsp := pb.CommandRsp{
 		TaskId:    taskrsp.TaskId,
 		BeaconId:  taskrsp.BeaconId,
@@ -198,7 +196,7 @@ func (hm *MsgHandler) pushTask() {
 
 	taskch, err := hm.cmdqueue.Subscribe(conf.CmdReqTopic)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return
 	}
 
@@ -229,7 +227,7 @@ func (hm *MsgHandler) pushTask() {
 				return
 			}
 			data, err := proto.Marshal(&task)
-			taskdataenc, err := chacha20.Chacha20Crypt(data, beacon.SessionKey)
+			taskdataenc, err := crypto.Xchacha20(beacon.SessionKey, data)
 			if err != nil {
 				return
 			}

@@ -34,8 +34,7 @@ set (BEACON_COMM_CORE ${BEACON_SRC_DIR}/main.cpp
     ${BEACON_SRC_DIR}/body/msghander/msg.cpp
     ${BEACON_SRC_DIR}/body/msghander/queue.cpp
     ${BEACON_SRC_DIR}/body/msghander/msghandler.cpp
-    ${BEACON_SRC_DIR}/base/crypto/chacha20.cpp
-    ${BEACON_SRC_DIR}/base/crypto/rsa.cpp
+    ${BEACON_SRC_DIR}/base/crypto/crypto.cpp
     ${BEACON_SRC_DIR}/base/log/log.cpp
         )
 
