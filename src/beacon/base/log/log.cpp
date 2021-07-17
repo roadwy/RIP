@@ -34,7 +34,6 @@ void debug_log(DWORD errno_code, const char* file, int line_no, LOG_LEVEL level,
 	if (level < ODS_LEVEL)
 		return;
 
-	//��ʽ����־
 	char log_content[ODS_LOG_MAXLENGTH + 1] = { 0 };
 
 	DWORD thread_id = ::GetCurrentThreadId();
@@ -83,9 +82,7 @@ void debug_log(DWORD errno_code, const char* file, int line_no, LOG_LEVEL level,
 	std::string log = log_content;
 	std::transform(log.begin(), log.end(), log.begin(), toupper);
 
-#ifdef ODS_OUTPUT_STD
 	printf("%s\n", log.c_str());
-#endif
 
 #ifdef _WIN32
 	OutputDebugStringA(log_content);

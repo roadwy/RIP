@@ -16,6 +16,7 @@
 #ifndef BODY_CRYPTO_H_
 #define BODY_CRYPTO_H_
 
+#include <stdint.h>
 #include <vector>
 #include <cryptopp/rsa.h>
 #include <cryptopp/osrng.h>

@@ -17,8 +17,16 @@ project(beacon)
 
 set(target_name beacon)
 
+message(STATUS ${CMAKE_SYSTEM_NAME} " " ${CMAKE_BUILD_TYPE})
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set (LINUX TRUE)
+    message(STATUS "set (LINUX TRUE)")
+endif()
+
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
+    add_definitions(-DDEBUG -D_DEBUG -DOUTPUT_LOG)
+    message(STATUS "defind DEBUG _DEBUG OUTPUT_LOG")
 endif()
 
 add_definitions(-DYASIO_HEADER_ONLY)
@@ -27,7 +35,6 @@ set(VcpkgRoot ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
 set (BEACON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set (PROTOBUF_CPP_DIR ${BEACON_SRC_DIR}/../proto_autogen_cpp)
 
-
 set (BEACON_COMM_CORE ${BEACON_SRC_DIR}/main.cpp
     ${BEACON_SRC_DIR}/body/beacon/beacon.cpp
     ${BEACON_SRC_DIR}/body/netio/netio.cpp
@@ -35,8 +42,7 @@ set (BEACON_COMM_CORE ${BEACON_SRC_DIR}/main.cpp
     ${BEACON_SRC_DIR}/body/msghander/queue.cpp
     ${BEACON_SRC_DIR}/body/msghander/msghandler.cpp
     ${BEACON_SRC_DIR}/base/crypto/crypto.cpp
-    ${BEACON_SRC_DIR}/base/log/log.cpp
-        )
+    ${BEACON_SRC_DIR}/base/log/log.cpp)
 
 set (BEACON_WIN_SRC ${BEACON_SRC_DIR}/body/cmdexec/cmdexec_win.cpp
                     ${BEACON_SRC_DIR}/base/win/winutil.cpp)

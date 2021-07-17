@@ -18,9 +18,6 @@
 
 #include <stdarg.h>
 
-#define OUTPUT_LOG
-#define ODS_OUTPUT_STD
-
 #define ODS_LOG_MAXLENGTH 1024
 
 #if defined(_MSC_VER)
@@ -35,7 +32,7 @@
 typedef int DWORD
 #  endif
 
-#ifdef OUTPUT_LOG
+#if (defined OUTPUT_LOG) || (defined _DEBUG)
 #	define LOG_ERROR ErrorODS
 #	define LOG_INFO InfoODS
 #	define LOG_DEBUG DebugODS
@@ -45,7 +42,7 @@ typedef int DWORD
 #	define LOG_DEBUG_E DebugODSE
 #else 
 #	define LOG_ERROR
-#	define LOG_INF
+#	define LOG_INFO
 #	define LOG_DEBUG
 
 #	define LOG_ERROR_E 
