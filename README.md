@@ -8,6 +8,9 @@
 
 <h5 align="center">Free,Open-Source,Cross-platform agent and Post-exploiton tool written in Golang and C++</h5>
 
+
+![platform](https://img.shields.io/badge/platform-cross-important?color=%23189000) ![Langue](https://img.shields.io/badge/language-golang/c++-orange.svg) ![stars](https://img.shields.io/github/stars/geemion/khepri) ![license](https://img.shields.io/github/license/geemion/khepri)
+
 ### Description
 
 Khepri is a Cross-platform agent, the architecture and usage like Coblat Strike but free and open-source.
@@ -47,7 +50,7 @@ Khepri is a Cross-platform agent, the architecture and usage like Coblat Strike 
  |------------|-----------|------------ |----------|
  | beacon     | √         | √           |          |
  | teamserver | √         | √           |√         |
- | teamclient | √         | √           |          |
+ | teamclient | √         | √           |√         |
 
 
 ### Quick Start
@@ -57,12 +60,13 @@ Please see [Quick Start](docs/quick_start.md)
 ### TODO
 - [ ] Refactor teamserver code
 - [ ] Beacon supports more protocols:https、dns
-- [ ] Beacon supports https-dns
+- [ ] Beacon supports https-dns 
 - [ ] Beacon supports dynamic plugin
-- [ ] Beacon and Teamclient support proxy
+- [ ] Beacon support proxy
+- [ ] Teamclient support proxy
 - [ ] Support CI
-- [ ] Beacon and teamclient support macos
-- [ ] Reduce beacon to 100kb(Don't use openssl、support Mingw compile)
+- [ ] Beacon and ~~teamclient support macos~~
+- [ ] Reduce beacon to 100kb(~~Don't use openssl~~、support Mingw compile)
 ...
 
 ### Contributing
