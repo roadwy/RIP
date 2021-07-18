@@ -21,55 +21,70 @@
 #include <unistd.h>
 #include <string.h>
 
-bool inx::get_mac(std::string &mac) {
-	struct ifreq ifr;
-	struct ifconf ifc;
-	char buf[1024];
-	bool success = false;
+bool inx::get_mac(std::string &mac)
+#ifdef _Darwin
+{
+    auto trim = [&](std::string& str){
+        if (str.empty())
+            return str;
+       return  str.substr(0,str.find_first_of("\n"));
+    };
+    auto ret = execute_cmd("ifconfig en0 | awk '/ether/{print $2}'","/", mac);
+    mac = trim(mac);
+    return ret;
+}
+#else
+{
+    struct ifreq ifr;
+    struct ifconf ifc;
+    char buf[1024];
+    bool success = false;
 
-	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
-	if (sock == -1)
-		return false;
+    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if (sock == -1)
+        return false;
 
-	ifc.ifc_len = sizeof(buf);
-	ifc.ifc_buf = buf;
-	if (ioctl(sock, SIOCGIFCONF, &ifc) == -1)
-		return false;
+    ifc.ifc_len = sizeof(buf);
+    ifc.ifc_buf = buf;
+    if (ioctl(sock, SIOCGIFCONF, &ifc) == -1)
+        return false;
 
-	struct ifreq* it = ifc.ifc_req;
-	const struct ifreq* const end = it + (ifc.ifc_len / sizeof(struct ifreq));
+    struct ifreq* it = ifc.ifc_req;
+    const struct ifreq* const end = it + (ifc.ifc_len / sizeof(struct ifreq));
 
-	for (; it != end; ++it) 
-	{
-		strcpy(ifr.ifr_name, it->ifr_name);
-		if (ioctl(sock, SIOCGIFFLAGS, &ifr) == 0) 
-		{
-			if (!(ifr.ifr_flags & IFF_LOOPBACK)) 
-			{ 
-				if (ioctl(sock, SIOCGIFHWADDR, &ifr) == 0) 
-				{
-					success = true;
-					break;
-				}
-			}
-		}
-	}
+    for (; it != end; ++it)
+    {
+        strcpy(ifr.ifr_name, it->ifr_name);
+        if (ioctl(sock, SIOCGIFFLAGS, &ifr) == 0)
+        {
+            if (!(ifr.ifr_flags & IFF_LOOPBACK))
+            {
+                if (ioctl(sock, SIOCGIFHWADDR, &ifr) == 0)
+                {
+                    success = true;
+                    break;
+                }
+            }
+        }
+    }
 
-	if (success) 
-	{
-		char temp[32] = {0};
-		sprintf(temp, "%02X-%02X-%02X-%02X-%02X-%02X",
-		        uint8_t(ifr.ifr_addr.sa_data[0]),
+    if (success)
+    {
+        char temp[32] = {0};
+        sprintf(temp, "%02X-%02X-%02X-%02X-%02X-%02X",
+                uint8_t(ifr.ifr_addr.sa_data[0]),
                 uint8_t(ifr.ifr_addr.sa_data[1]),
                 uint8_t(ifr.ifr_addr.sa_data[2]),
                 uint8_t(ifr.ifr_addr.sa_data[3]),
                 uint8_t(ifr.ifr_addr.sa_data[4]),
                 uint8_t(ifr.ifr_addr.sa_data[5]));
-		mac = temp;
-		return true;
-	}
-	return false;
+        mac = temp;
+        return true;
+    }
+    return false;
 }
+#endif
+
 
 bool inx::execute_cmd(const std::string &cmd_line, const std::string &current_dir, std::string &out_put) {
 	const int buf_size = 1024;

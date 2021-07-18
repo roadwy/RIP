@@ -19,9 +19,18 @@ set(target_name beacon)
 
 message(STATUS ${CMAKE_SYSTEM_NAME} " " ${CMAKE_BUILD_TYPE})
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+    set (UINX TRUE)
+    message(STATUS "set (UNIX TRUE)")
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    add_definitions(-D_Darwin)
+    set(CMAKE_CXX_FLAGS "-std=c++11")
+endif()
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set (LINUX TRUE)
-    message(STATUS "set (LINUX TRUE)")
+    add_definitions(-D_LINUX)
 endif()
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
@@ -47,7 +56,7 @@ set (BEACON_COMM_CORE ${BEACON_SRC_DIR}/main.cpp
 set (BEACON_WIN_SRC ${BEACON_SRC_DIR}/body/cmdexec/cmdexec_win.cpp
                     ${BEACON_SRC_DIR}/base/win/winutil.cpp)
 
-set (BEACON_LINUX_SRC ${BEACON_SRC_DIR}/body/cmdexec/cmdexec_linux.cpp
+set (BEACON_LINUX_SRC ${BEACON_SRC_DIR}/body/cmdexec/cmdexec_inx.cpp
                       ${BEACON_SRC_DIR}/base/inx/inxutil.cpp)
 
 set (PROTOBUF_CPP_SRC ${PROTOBUF_CPP_DIR}/netio.pb.cc
@@ -79,15 +88,15 @@ endif(MSVC)
 find_package(cryptopp CONFIG REQUIRED)
 find_package(Protobuf CONFIG REQUIRED)
 
-if(LINUX)
+if(UINX)
 
     set(CMAKE_CXX_FLAGS_MINSIZEREL  "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -s")
     set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} -Os -s")
 
     add_executable(${target_name} ${BEACON_COMM_CORE} ${BEACON_LINUX_SRC} ${PROTOBUF_CPP_SRC})
     target_link_libraries(${target_name}  PRIVATE cryptopp-static PRIVATE protobuf::libprotobuf-lite PRIVATE dl PRIVATE pthread)
-else(LINUX)
+else(UINX)
 
     add_executable(${target_name} ${BEACON_COMM_CORE} ${BEACON_WIN_SRC} ${PROTOBUF_CPP_SRC})
     target_link_libraries(${target_name} PRIVATE cryptopp-static PRIVATE protobuf::libprotobuf-lite)
-endif(LINUX)
+endif(UINX)

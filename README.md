@@ -48,7 +48,7 @@ Khepri is a Cross-platform agent, the architecture and usage like Coblat Strike 
 
  | System     | Windows   | Linux       | Macos    |
  |------------|-----------|------------ |----------|
- | beacon     | √         | √           |          |
+ | beacon     | √         | √           |√         |
  | teamserver | √         | √           |√         |
  | teamclient | √         | √           |√         |
 
@@ -65,7 +65,7 @@ Please see [Quick Start](docs/quick_start.md)
 - [ ] Beacon support proxy
 - [ ] Teamclient support proxy
 - [ ] Support CI
-- [ ] Beacon and ~~teamclient support macos~~
+- [x] ~~Beacon and teamclient support macos~~
 - [ ] Reduce beacon to 100kb(~~Don't use openssl~~、support Mingw compile)
 ...
 

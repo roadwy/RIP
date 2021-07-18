@@ -25,7 +25,6 @@
 #else
 typedef char TCHAR;
 #define _TRUNCATE ((size_t)-1)
-#define GetCurrentThreadId pthread_self
 #  endif
 
 
@@ -35,8 +34,6 @@ void debug_log(DWORD errno_code, const char* file, int line_no, LOG_LEVEL level,
 		return;
 
 	char log_content[ODS_LOG_MAXLENGTH + 1] = { 0 };
-
-	DWORD thread_id = ::GetCurrentThreadId();
 	std::string code_file = file;
 	std::string::size_type pos = code_file.find_last_of('\\');
 	if (pos != std::string::npos && pos + 1 < code_file.size()) code_file = code_file.substr(pos + 1);
@@ -58,7 +55,7 @@ void debug_log(DWORD errno_code, const char* file, int line_no, LOG_LEVEL level,
 		break;
 	}
 #if _DEBUG
-	int written = sprintf(log_content, "%s [%s:%d] %u ", level_str.c_str(), code_file.c_str(), line_no, thread_id);
+	int written = sprintf(log_content, "%s [%s:%d]", level_str.c_str(), code_file.c_str(), line_no);
 #else
 	int written = sprintf(log_content, "%s ", level_str.c_str());
 #endif

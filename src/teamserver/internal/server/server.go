@@ -63,7 +63,6 @@ func (cs *beaconServer) React(frame []byte, c gnet.Conn) (out []byte, action gne
 }
 
 func (cs *beaconServer) OnClosed(c gnet.Conn, err error) (action gnet.Action) {
-	cs.handler.HandleClose(c)
 	return
 }
 
