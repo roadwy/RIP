@@ -38,6 +38,7 @@ ${CLIENT_SRC_DIR}/ui/khepri.ui
 ${CLIENT_SRC_DIR}/ui/listeners.ui
 ${CLIENT_SRC_DIR}/ui/process.ui
 ${CLIENT_SRC_DIR}/ui/shell.ui
+${CLIENT_SRC_DIR}/ui/login.ui
 ${CLIENT_SRC_DIR}/res/client.qrc
 )
 

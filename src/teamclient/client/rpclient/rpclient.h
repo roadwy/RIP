@@ -45,7 +45,7 @@ typedef std::function<void(std::string msg)> fatal_func;
 class rpclient
 {
 public:
-	rpclient(const std::string& url);
+	rpclient(const std::string& url, const std::string& http_proxy);
 	rpclient(std::shared_ptr<Channel> channel);
 
 	bool login(const std::string& username, const std::string& password);

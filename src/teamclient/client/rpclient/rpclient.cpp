@@ -22,11 +22,14 @@ rpclient::rpclient(std::shared_ptr<Channel> channel) :stub_(TeamRPCService::NewS
 
 }
 
-//todo:set custom http_proxy
-rpclient::rpclient(const std::string& url) :fatal_(nullptr)
+rpclient::rpclient(const std::string& url, const std::string& http_proxy) :fatal_(nullptr)
 {
 	grpc::ChannelArguments channel_args;
-	channel_args.SetInt(GRPC_ARG_ENABLE_HTTP_PROXY, 0);
+	if (http_proxy.empty())
+	{
+		channel_args.SetInt(GRPC_ARG_ENABLE_HTTP_PROXY, false);
+	}
+	channel_args.SetString(GRPC_ARG_HTTP_PROXY, http_proxy);
 	auto channel = grpc::CreateCustomChannel(url, grpc::InsecureChannelCredentials(), channel_args);
 	stub_ = TeamRPCService::NewStub(channel);
 }

@@ -39,8 +39,10 @@ void login::on_connectbtn()
 
 	auto username = ui_.userEdit->text().trimmed().toStdString();
 	auto password = ui_.passwordEdit->text().trimmed().toStdString();
+
+	auto http_proxy = ui_.httpProxyEdit->text().trimmed().toStdString();
 	if (!rpc_client_)
-		rpc_client_ = new rpclient(url);
+		rpc_client_ = new rpclient(url, http_proxy);
 
 	save_connect_cfg();
 
@@ -65,9 +67,11 @@ void login::save_connect_cfg()
 	host_ = ui_.hostEdit->text().trimmed();
 	port_ = ui_.portEdit->text().trimmed();
 	username_ = ui_.userEdit->text().trimmed();
+	http_proxy_ = ui_.httpProxyEdit->text().trimmed();
 	SAVE_CFG_VARIANT(host_);
 	SAVE_CFG_VARIANT(port_);
 	SAVE_CFG_VARIANT(username_);
+	SAVE_CFG_VARIANT(http_proxy_);
 	cfg.sync();
 }
 
@@ -77,8 +81,10 @@ void login::load_connect_cfg()
 	host_ = LOAD_CFG_VARIANT(host_);
 	port_ = LOAD_CFG_VARIANT(port_);
 	username_ = LOAD_CFG_VARIANT(username_);
+	http_proxy_ = LOAD_CFG_VARIANT(http_proxy_);
 	ui_.hostEdit->setText(host_);
 	ui_.portEdit->setText(port_);
 	ui_.userEdit->setText(username_);
+	ui_.httpProxyEdit->setText(http_proxy_);
 }
 

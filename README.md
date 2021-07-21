@@ -63,10 +63,10 @@ Please see [Quick Start](docs/quick_start.md)
 - [ ] Beacon supports https-dns 
 - [ ] Beacon supports dynamic plugin
 - [ ] Beacon support proxy
-- [ ] Teamclient support proxy
+- [x] ~~Teamclient support proxy~~
 - [ ] Support CI
 - [x] ~~Beacon and teamclient support macos~~
-- [ ] Reduce beacon to 100kb(~~Don't use openssl~~、support Mingw compile)
+- [x] Reduce beacon to ~~100kb~~700kb(~~Don't use openssl~~、support Mingw compile(can't reduce size))
 ...
 
 ### Contributing

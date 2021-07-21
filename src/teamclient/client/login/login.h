@@ -38,6 +38,7 @@ private:
 	QString host_;
 	QString port_;
 	QString username_;
+	QString http_proxy_;
 
 	Ui_Connect ui_;
 	rpclient* rpc_client_;
