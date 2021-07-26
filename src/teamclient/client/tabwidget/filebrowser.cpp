@@ -44,6 +44,7 @@ file_tab::file_tab(QWidget* parent, const QString& beacon_id, beacon_req* cmd) :
 	init_file_view();
 
 	connect(ui_.FileTreeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_filetree_doubleclicked(QModelIndex)));
+	connect(ui_.FileDetailView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_filelist_doubleclicked(QModelIndex)));
 	connect(ui_.UpLevelButton, SIGNAL(clicked()), this, SLOT(on_uplevel_dir()));
 
 	cmd_->send_get_disk_list(beacon_id_.toStdString());
@@ -97,11 +98,11 @@ void file_tab::on_filelist_data(c2::FileListData& data)
 		auto modified_item = new QStandardItem(get_str_tm(file.modify_unix_tm()));
 		QStandardItem* dir_item = nullptr;
 		if (!file.is_dir()) {
-			dir_item = new QStandardItem(QIcon(":/ico/ico/file.png"), "");
+			dir_item = new QStandardItem(QIcon(":/ico/ico/file.png"), "F");
 			dir_item->setCheckable(false);
 		}
 		else
-			dir_item = new QStandardItem(QIcon(":/ico/ico/dir.png"), "");
+			dir_item = new QStandardItem(QIcon(":/ico/ico/dir.png"), "D");
 
 		filelist_model_->setItem(count, ICO, dir_item);
 		filelist_model_->setItem(count, NAME, name_item);
@@ -232,7 +233,6 @@ QStandardItem* file_tab::get_parent_item(const QString& parent_dir)
 		return QModelIndex();
 	};
 
-
 	for (int i = 0; i < dirs.size(); i++)
 	{
 		index = get_dir(index, dirs[i]);
@@ -331,7 +331,6 @@ void file_tab::on_filetree_doubleclicked(QModelIndex index)
 		item_list << parent.data().toString();
 		parent = parent.parent();
 	}
-
 	QString path;
 	for (int i = (item_list.size() - 1); i >= 0; i--)
 	{
@@ -342,6 +341,18 @@ void file_tab::on_filetree_doubleclicked(QModelIndex index)
 
 	set_current_path(path);
 	cmd_->send_get_file_list(beacon_id_.toStdString(), path.toStdString());
+}
+
+void file_tab::on_filelist_doubleclicked(QModelIndex index)
+{
+	auto dir = index.sibling(index.row(), ICO).data().toString();
+	if (dir != "D")
+		return;
+
+	auto filename = index.sibling(index.row(), NAME).data().toString();
+	QDir qdir(ui_.CurrentPathEdit->text());
+	QString full_path = qdir.absoluteFilePath(filename);
+	cmd_->send_get_file_list(beacon_id_.toStdString(), full_path.toStdString());
 }
 
 void file_tab::on_uplevel_dir()

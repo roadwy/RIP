@@ -60,6 +60,7 @@ private:
 
 	private slots:
 	void on_filetree_doubleclicked(QModelIndex index);
+	void on_filelist_doubleclicked(QModelIndex index);
 	void on_uplevel_dir();
 
 private:
