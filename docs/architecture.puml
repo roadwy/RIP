@@ -15,8 +15,8 @@ cloud {
 }
 
 package "beacon"{
-  [cmd]
-  [screehshot]
+  [shell]
+  [file]
   [beacon_yasio_client]
 }
 

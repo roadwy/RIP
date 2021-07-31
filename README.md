@@ -12,15 +12,15 @@
 ![platform](https://img.shields.io/badge/platform-cross-important?color=%23189000) ![Langue](https://img.shields.io/badge/language-golang/c++-orange.svg) ![stars](https://img.shields.io/github/stars/geemion/khepri) ![license](https://img.shields.io/github/license/geemion/khepri)
 
 ### Description
-
-Khepri is a Cross-platform agent, the architecture and usage like Coblat Strike but free and open-source.
+ 
+Khepri is a Cross-platform agent, the architecture and usage like Cobalt Strike but free and open-source.
 
 ----
 
 **Disclaimer**: *This project is for learning Golang and C++ only, if someone's rights have been violated, please contact me to remove the project, the last DO NOT USE IT ILLEGALLY and author/contributors do not take any responsbility for any damage caused by malicious actors using any software presented herein.*
 
 <p align="center">
- <img alt="architecture" src="docs/images/architecture.png" height="100%" width="100%">
+ <img alt="architecture" src="docs/images/architecture.png" height="90%" width="90%">
 </p>
 
 - beacon: Agent, written in C++.
@@ -30,7 +30,7 @@ Khepri is a Cross-platform agent, the architecture and usage like Coblat Strike 
 
 ### Features
 <p align="center">
- <img alt="architecture" src="docs/images/teamclient.png" height="100%" width="100%">
+ <img alt="architecture" src="docs/images/teamclient.gif" height="90%" width="90%">
 </p>
 
 - Supported C2 Protocols:

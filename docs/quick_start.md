@@ -5,7 +5,9 @@ vcpkg、gcc、g++、cmake、vs2015、go 1.14、goland、clion、protobuf protoc�
 #### Install dependent open source code
 
 **beacon**: yasio、cryptopp、protobuf
+
 **teamclient**：grpc、qt5-base
+
 **teamserver**: go mod tidy、go get all
 
 The C/C++ language use vcpkg  to install dependent code, Please refer https://github.com/Microsoft/vcpkg#quick-start.
