@@ -20,7 +20,7 @@ Khepri is a Cross-platform agent, the architecture and usage like Cobalt Strike 
 **Disclaimer**: *This project is for learning Golang and C++ only, if someone's rights have been violated, please contact me to remove the project, the last DO NOT USE IT ILLEGALLY and author/contributors do not take any responsbility for any damage caused by malicious actors using any software presented herein.*
 
 <p align="center">
- <img alt="architecture" src="docs/images/architecture.png" height="90%" width="90%">
+ <img alt="architecture" src="docs/images/architecture.png" height="100%" width="100%">
 </p>
 
 - beacon: Agent, written in C++.
@@ -30,7 +30,7 @@ Khepri is a Cross-platform agent, the architecture and usage like Cobalt Strike 
 
 ### Features
 <p align="center">
- <img alt="architecture" src="docs/images/teamclient.gif" height="90%" width="90%">
+ <img alt="architecture" src="docs/images/teamclient.gif" height="100%" width="100%">
 </p>
 
 - Supported C2 Protocols:
