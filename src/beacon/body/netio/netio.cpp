@@ -16,11 +16,11 @@
 #include "yasio/obstream.hpp"
 #include "netio.h"
 #include "protocol_header.h"
-#include "../base/log/log.h"
 #include "taskdata.pb.h"
 #include "netio.pb.h"
 #include "cmdexec/cmdexec.h"
 #include "beacon/beacon.h"
+#include "../base/log/log.h"
 
 netio_service::netio_service(std::string ip, u_short port, int netio_kind) :
 	service_(io_hostent{ ip, port }), handler_(*this), netio_kind_(netio_kind), session_id_(0), transport_(nullptr)

@@ -82,8 +82,8 @@ func GetBeacons() (beaconsData []byte, err error) {
 		}
 
 		b := &pb.BeaconInfo{
-			CreateTm:   v.CreatedAt.String(),
-			UpdateTm:   v.UpdatedAt.String(),
+			CreateTm:   v.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdateTm:   v.UpdatedAt.Format("2006-01-02 15:04:05"),
 			Ipaddr:     v.IpAddr,
 			BeaconId:   v.BeaconId,
 			DetailInfo: detail,

@@ -14,6 +14,11 @@
  */
 
 #include "crypto.h"
+#include <cryptopp/hex.h>
+#include <cryptopp/md5.h>
+#include <cryptopp/rsa.h>
+#include <cryptopp/osrng.h>
+#include <cryptopp/chacha.h>
 
 void generate_random_block(uint8_t* block, size_t block_size)
 {
@@ -43,4 +48,15 @@ int rsa_pub_encrypt(const char* N, const char* E, unsigned char* plain_data, int
 	cipher_data.resize(cipher_len);
 	encryptor.Encrypt(rng, (const unsigned char *)plain_data, plain_data_size, (unsigned char *)cipher_data.data());
 	return encryptor.FixedCiphertextLength();
+}
+
+std::string md5_string(const std::string& msg)
+{
+	std::string digest;
+	CryptoPP::Weak1::MD5 md5;
+	CryptoPP::HashFilter hashfilter(md5);
+	hashfilter.Attach(new CryptoPP::HexEncoder(new CryptoPP::StringSink(digest), false));
+	hashfilter.Put(reinterpret_cast<const unsigned char*>(msg.c_str()), msg.length());
+	hashfilter.MessageEnd();
+	return std::move(digest);
 }

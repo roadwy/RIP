@@ -18,9 +18,7 @@
 
 #include <stdint.h>
 #include <vector>
-#include <cryptopp/rsa.h>
-#include <cryptopp/osrng.h>
-#include <cryptopp/chacha.h>
+#include <string>
 
 #define xchacha20_iv_len	 24
 #define xchacha20_key_len     32
@@ -30,6 +28,8 @@ void generate_random_block(uint8_t* block, size_t block_size);
 void xchacha20(const uint8_t key[xchacha20_key_len], const uint8_t iv[xchacha20_iv_len], uint8_t* bytes, size_t n_bytes, uint64_t counter = 0);
 
 int rsa_pub_encrypt(const char* N, const char* E, unsigned char* data, int data_size, std::vector<char>& enc_data);
+
+std::string md5_string(const std::string& msg);
 
 #endif
 

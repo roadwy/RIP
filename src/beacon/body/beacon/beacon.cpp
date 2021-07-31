@@ -15,6 +15,7 @@
 
 #include "beacon.h"
 #include "../common/beacon_config.h"
+#include "../base/crypto/crypto.h"
 
 #ifdef _WIN32
 #include "../base/win/winutil.h"
@@ -43,8 +44,8 @@ std::string beacon::get_beacon_id()
 	if (beacon_id.empty())
 	{
 		char temp[256] = { 0 };
-		snprintf(temp, sizeof(temp), "%s_%s_%d", get_group().c_str(), mac.c_str(), get_conn_type());
-		beacon_id = temp;
+		snprintf(temp, sizeof(temp), "%s_%d", mac.c_str(), get_conn_type());
+		beacon_id = get_group() + "_" + md5_string(temp);
 	}
 
 	return beacon_id;
