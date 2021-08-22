@@ -9,7 +9,7 @@
 <h5 align="center">Free,Open-Source,Cross-platform agent and Post-exploiton tool written in Golang and C++</h5>
 
 
-![platform](https://img.shields.io/badge/platform-cross-important?color=%23189000) ![Langue](https://img.shields.io/badge/language-golang/c++-orange.svg) ![stars](https://img.shields.io/github/stars/geemion/khepri) ![license](https://img.shields.io/github/license/geemion/khepri)
+![platform](https://img.shields.io/badge/platform-cross-important?color=%23189000) ![Langue](https://img.shields.io/badge/language-golang/c++-orange.svg) [![stars](https://img.shields.io/github/stars/geemion/khepri)](https://github.com/geemion/Khepri/stargazers)
 
 ### Description
  
@@ -17,7 +17,7 @@ Khepri is a Cross-platform agent, the architecture and usage like Cobalt Strike 
 
 ----
 
-**Disclaimer**: *This project is for learning Golang and C++ only, if someone's rights have been violated, please contact me to remove the project, the last DO NOT USE IT ILLEGALLY and author/contributors do not take any responsbility for any damage caused by malicious actors using any software presented herein.*
+**Disclaimer**: *This project was created for educational purposes and should not be used in environments without legal authorization. if someone's rights have been violated, please contact me to remove the project, the last DO NOT USE IT ILLEGALLY and author/contributors do not take any responsbility for any damage caused by malicious actors using any software presented herein.*
 
 <p align="center">
  <img alt="architecture" src="docs/images/architecture.png" height="100%" width="100%">

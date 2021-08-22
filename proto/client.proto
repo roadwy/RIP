@@ -15,6 +15,7 @@ enum CMDID{
     GET_BEACON_SERVER = 5;
     ERROR_MSG = 6;
     DELETE_BEACON = 7;
+    SYNC_DOWNLOAD_FILES = 8;
 }
 
 message BeaconInfo{
