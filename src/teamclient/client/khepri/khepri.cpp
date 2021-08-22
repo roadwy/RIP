@@ -74,7 +74,7 @@ khepri::khepri(rpclient* rpc_client) :
 	log_ = new eventlog_tab(this);
 	on_view_eventlog(true);
 
-	downloads_ = new downloads_tab(this);
+	downloads_ = new downloads_tab(this, rpc_client_);
 
 	listeners_ = new listeners_tab(this, rpc_client_);
 
@@ -364,8 +364,10 @@ void khepri::on_beacon_data(const int& msg_id, const QString& beacon_id, const Q
 {
 	std::ostringstream log_stream;
 	log_stream << "[+] " << "recv beacon rsp:" << beacon_id.toStdString() << " " << MSGID_NAME[msg_id] << "(" << msg_id << ")" << ",datasize:" << data.size() << std::endl;
-
 	on_statusmsg(QString::fromStdString(log_stream.str()));
+
+	if (data.size() == 0)
+		return;
 
 	switch (msg_id)
 	{
@@ -465,7 +467,7 @@ void khepri::on_view_eventlog(bool checked)
 void khepri::on_view_download(bool checked)
 {
 	if (!downloads_)
-		downloads_ = new downloads_tab(this);
+		downloads_ = new downloads_tab(this, rpc_client_);
 
 	add_tab(downloads_, "Downloads");
 }

@@ -49,6 +49,8 @@ public:
 
 	void send_shell_cmd(const std::string& beacon_id, const std::string& path, const std::string& cmd);
 
+	void send_sync_files();
+
 private:
 	void put_strparam_req(const std::string& beacon_id, int msg_id, const std::string str_param);
 

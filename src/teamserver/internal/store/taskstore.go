@@ -81,12 +81,23 @@ func UpdateTask(taskid uint64, rspparam []byte) (err error) {
 	task := TaskStore{}
 	db := Instance()
 
-	if db.First(&task, taskid).RecordNotFound() {
-		return errors.New("task id not found")
+	if db.Where("task_id = ? and status = ?", taskid, Status_Dispatch).First(&task).RecordNotFound() {
+		return
 	}
 
 	return db.Model(&task).Update(TaskStore{
 		RspParam: rspparam,
 		Status:   Status_Done,
 	}).Error
+}
+
+func GetTaskRspData(msgid int32)(rspDatas []TaskStore, err error){
+
+	db := Instance()
+	query := db.Where("msg_id = ? and status = ?", msgid, Status_Done).Find(&rspDatas)
+	if query.Error != nil {
+		err = query.Error
+		return
+	}
+	return
 }

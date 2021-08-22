@@ -23,11 +23,12 @@
 
 PROXY_FILTER(downloads_sort_filter_proxy_model);
 
+class rpclient;
 class downloads_tab : public QWidget
 {
 	Q_OBJECT
 public:
-	downloads_tab(QWidget* parent);
+	downloads_tab(QWidget* parent, rpclient* rpc);
 
 	void on_downloads_data(const QString& beacon_id, const QByteArray& data);
 
@@ -40,10 +41,15 @@ private:
 
 	void on_reveal_file(const QString& beaconid, const QString& filename);
 
+	private slots:
+	void on_sync_files();
+
 private:
 	Ui_DownloadsForm ui_;
 
 	QMenu download_menu_;
+
+	rpclient* rpc_;
 
 	QStandardItemModel *downloads_model_;
 	downloads_sort_filter_proxy_model *proxy_downloads_;

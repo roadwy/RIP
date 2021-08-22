@@ -122,7 +122,10 @@ func (t *TeamRPCService) CommandChannel(channel pb.TeamRPCService_CommandChannel
 				break
 			}
 			store.UpdateTask(data.TaskId, data.ByteValue)
-			channel.Send(&data)
+			err := channel.Send(&data)
+			if err != nil {
+				log.Println(err.Error())
+			}
 		}
 		wg.Done()
 	}()
@@ -224,11 +227,39 @@ func (t *TeamRPCService) ServerCmd(ctx context.Context, req *pb.ServerCmdReq) (r
 				break
 			}
 		}
+	case pb.CMDID_SYNC_DOWNLOAD_FILES:
+		{
+			err := t.syncDownloadFiles()
+			if err != nil {
+				data = t.setErrorMsg(rspCmdId, err)
+				rspCmdId = int32(pb.CMDID_ERROR_MSG)
+				break
+			}
+			break
+		}
 	default:
 		break
 	}
-
 	return &pb.ServerCmdRsp{CmdId: rspCmdId, ByteValue: data}, nil
+}
+
+func (t *TeamRPCService) syncDownloadFiles() (err error) {
+
+	rspData, err := store.GetTaskRspData(int32(pb.MSGID_DOWNLOAD_FILE))
+	if err != nil {
+		return
+	}
+
+	for _, data := range rspData {
+		rsp := pb.CommandRsp{
+			TaskId:    data.TaskID,
+			BeaconId:  data.BeaconId,
+			MsgId:     data.MsgId,
+			ByteValue: data.RspParam,
+		}
+		t.cmdQueue.Publish(conf.CmdRspTopic, rsp)
+	}
+	return
 }
 
 func (t *TeamRPCService) isValidToken(token string) (err error) {

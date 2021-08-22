@@ -15,6 +15,8 @@
 
 #include "downloads.h"
 #include "taskdata.pb.h"
+#include "../rpclient/rpclient.h"
+#include "client.pb.h"
 
 enum download_tab_menu_index {
 	BEACON_ID = 0,
@@ -32,10 +34,12 @@ bool downloads_sort_filter_proxy_model::lessThan(const QModelIndex &left, const 
 	return QString::compare(s1.toString(), s2.toString(), Qt::CaseInsensitive) < 0;
 }
 
-downloads_tab::downloads_tab(QWidget* parent)
+downloads_tab::downloads_tab(QWidget* parent, rpclient* rpc):rpc_(rpc)
 {
 	ui_.setupUi(this);
 	init_downloads_view();
+
+	connect(ui_.SyncButton, SIGNAL(clicked()), this, SLOT(on_sync_files()));
 }
 
 void downloads_tab::on_downloads_data(const QString& beacon_id, const QByteArray& data)
@@ -125,5 +129,19 @@ void downloads_tab::on_reveal_file(const QString& beaconid, const QString& filen
 	QString path = QCoreApplication::applicationDirPath() + "/" + beaconid;
 	QUrl url = QUrl::fromLocalFile(path);
 	QDesktopServices::openUrl(url);
+}
+
+void downloads_tab::on_sync_files()
+{
+	c2::ServerCmdReq req;
+	req.set_cmd_id(ct::SYNC_DOWNLOAD_FILES);
+
+	c2::ServerCmdRsp rsp;
+
+	rpc_->set_server_cmd(req, rsp);
+
+	if (rsp.cmd_id() == ct::ERROR_MSG) {
+		return;
+	}
 }
 
