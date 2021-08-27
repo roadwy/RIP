@@ -12,10 +12,24 @@ vcpkg、gcc、g++、cmake、vs2015、go 1.14、goland、clion、protobuf protoc�
 
 The C/C++ language use vcpkg  to install dependent code, Please refer https://github.com/Microsoft/vcpkg#quick-start.
 
-
 #### Clone and Generate the ProtoBuffer code
 - git clone https://github.com/geemion/khepri
 - proto: use *.proto file to generate protobuf and grpc code
+
+```
+//generate golang protobuf auto code
+protoc -I=[Khepri Proto Dir] --go_out=[Khepri Src Dir] [Khepri Proto Dir]\client.proto
+protoc -I=[Khepri Proto Dir] --go_out=[Khepri Src Dir] [Khepri proto dir]\netio.proto
+protoc -I=[Khepri Proto Dir] --go_out=[Khepri Src Dir] [Khepri proto dir]\taskdata.proto
+protoc -I=[Khepri Proto Dir] --go_out=plugins=grpc:[Khepri Src Dir] -I=[Khepri Proto Dir]\teamrpc.proto
+
+//generate cpp protobuf auto code
+protoc -I=[Khepri Proto Dir] --cpp_out=[Khepri Proto Dir]\..\src\proto_autogen_cpp [Khepri Proto Dir]\client.proto
+protoc -I=[Khepri Proto Dir] --cpp_out=[Khepri Proto Dir]\..\src\proto_autogen_cpp [Khepri Proto Dir]\netio.proto
+protoc -I=[Khepri Proto Dir] --cpp_out=[Khepri Proto Dir]\..\src\proto_autogen_cpp [Khepri Proto Dir]\taskdata.proto
+protoc -I=[Khepri Proto Dir] --cpp_out=[Khepri Proto Dir]\..\src\proto_autogen_cpp [Khepri Proto Dir]\teamrpc.proto
+protoc -I=[Khepri Proto Dir] --grpc_out="[Khepri Proto Dir]\..\src\proto_autogen_cpp" --plugin=protoc-gen-grpc="[Khepri Proto Dir]\grpc_cpp_plugin.exe" [Khepri Proto Dir]\teamrpc.proto
+```
 
 #### Compile
 - beacon:
