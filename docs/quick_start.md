@@ -4,7 +4,7 @@ vcpkg、gcc、g++、cmake、vs2015、go 1.14、goland、clion、protobuf protoc�
 
 #### Install dependent open source code
 
-**beacon**: yasio、cryptopp、protobuf
+**beacon**: cryptopp、protobuf
 
 **teamclient**：grpc、qt5-base
 
@@ -13,7 +13,7 @@ vcpkg、gcc、g++、cmake、vs2015、go 1.14、goland、clion、protobuf protoc�
 The C/C++ language use vcpkg  to install dependent code, Please refer https://github.com/Microsoft/vcpkg#quick-start.
 
 #### Clone and Generate the ProtoBuffer code
-- git clone https://github.com/geemion/khepri
+- git clone --recursive https://github.com/geemion/Khepri
 - proto: use *.proto file to generate protobuf and grpc code
 
 ```
@@ -30,6 +30,7 @@ protoc -I=[Khepri Proto Dir] --cpp_out=[Khepri Proto Dir]\..\src\proto_autogen_c
 protoc -I=[Khepri Proto Dir] --cpp_out=[Khepri Proto Dir]\..\src\proto_autogen_cpp [Khepri Proto Dir]\teamrpc.proto
 protoc -I=[Khepri Proto Dir] --grpc_out="[Khepri Proto Dir]\..\src\proto_autogen_cpp" --plugin=protoc-gen-grpc="[Khepri Proto Dir]\grpc_cpp_plugin.exe" [Khepri Proto Dir]\teamrpc.proto
 ```
+**NOTE: The protoc executable file must copy from protobuf dir([vcpkg root]\installed\x64-windows-static\tools\protobuf\protoc.exe). otherwise there will get a compile error, like https://github.com/geemion/Khepri/issues/2.**
 
 #### Compile
 - beacon:
