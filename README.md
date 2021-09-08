@@ -13,7 +13,7 @@
 
 ### Description
  
-Khepri is a Cross-platform agent, the architecture and usage like Cobalt Strike but free and open-source.
+Khepri is a Cross-platform agent. It's very basic and only for educational purposes.
 
 ----
 
