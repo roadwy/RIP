@@ -71,4 +71,5 @@ Please see [Quick Start](docs/quick_start.md)
 ...
 
 ### Contributing
-Issues and PR is welcome.
+* Issues and PR are welcome.
+* [Khepri contributing format](docs/contributing.md)
