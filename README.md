@@ -17,7 +17,7 @@ Khepri is a Cross-platform agent. It's very basic and only for educational purpo
 
 ----
 
-**Disclaimer**: *This project was created for educational purposes and should not be used in environments without legal authorization. if someone's rights have been violated, please contact me to remove the project, the last DO NOT USE IT ILLEGALLY and author/contributors do not take any responsbility for any damage caused by malicious actors using any software presented herein.*
+**Disclaimer**: *This project was created for educational purposes and should not be used in environments without legal authorization. If someone's rights have been violated, please contact me to remove the project, the last DO NOT USE IT ILLEGALLY and author/contributors do not take any responsbility for any damage caused by malicious actors using any software presented herein.*
 
 <p align="center">
  <img alt="architecture" src="docs/images/architecture.png" height="100%" width="100%">
@@ -71,4 +71,4 @@ Please see [Quick Start](docs/quick_start.md)
 ...
 
 ### Contributing
-Issues and PR is welcome.
+Issues and PR are welcome.
